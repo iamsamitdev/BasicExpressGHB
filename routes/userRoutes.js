@@ -111,7 +111,7 @@ router.post('/refresh', userController.refreshToken)
  * /auth/logout:
  *   post:
  *     summary: Logout a user
- *     tags: [Auth]
+ *     tags: [Users]
  *     requestBody:
  *       required: true
  *       content:
