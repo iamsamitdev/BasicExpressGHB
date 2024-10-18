@@ -3,11 +3,13 @@ const dotenv = require('dotenv')
 const db = require('./utils/db')
 const productRoutes = require('./routes/productRoutes')
 const userRoutes = require('./routes/userRoutes')
+const setupSwagger = require('./utils/swagger')
 
 dotenv.config()
 
 const app = express()
 app.use(express.json())
+setupSwagger(app)
 
 app.use('/products', productRoutes)
 app.use('/users', userRoutes)
