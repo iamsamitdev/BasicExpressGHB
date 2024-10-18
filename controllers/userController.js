@@ -59,3 +59,32 @@ exports.loginUser = async (req, res) => {
     res.status(500).json({ message: 'Error logging in' })
   }
 }
+
+// ฟังก์ชันสำหรับการ Refresh Token
+exports.refreshToken = async (req, res) => {
+  const { refreshToken } = req.body
+  
+  if (!refreshToken) return res.status(401).json({ message: 'Refresh token is required' })
+  
+  if (!jwtUtils.isRefreshTokenValid(refreshToken)) {
+    return res.status(403).json({ message: 'Invalid refresh token' })
+  }
+
+  try{
+    const decoded = jwtUtils.verifyRefreshToken(refreshToken) // ถอดรหัส Refresh Token
+    const userId = (decoded).id // ดึงข้อมูล userId จาก decoded
+    const newAccessToken = jwtUtils.generateAccessToken(userId) // สร้าง Access Token ใหม่
+    res.status(200).json({ accessToken: newAccessToken })
+  }catch (error) {
+    console.error(error)
+    res.status(403).json({ message: 'Invalid refresh token' })
+  }
+}
+
+// ฟังก์ชันสำหรับออกจากระบบ
+exports.logoutUser = async (req, res) => {
+  const { refreshToken } = req.body
+  if (!refreshToken) return res.status(400).json({ message: 'Refresh token is required' })
+  jwtUtils.removeRefreshToken(refreshToken)
+  res.json({ message: 'User logged out successfully' })
+}
