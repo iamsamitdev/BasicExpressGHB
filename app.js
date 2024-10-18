@@ -1,11 +1,16 @@
 const express = require('express')
+const dotenv = require('dotenv')
 const db = require('./utils/db')
 const productRoutes = require('./routes/productRoutes')
+const userRoutes = require('./routes/userRoutes')
+
+dotenv.config()
 
 const app = express()
 app.use(express.json())
 
 app.use('/products', productRoutes)
+app.use('/users', userRoutes)
 
 app.get('/', (req, res) => {
   res.send('Hello World!')
@@ -35,6 +40,10 @@ app.get('/testdb', async(req, res) => {
   }
 })
 
-app.listen(3000, () => {
-  console.log('App is running on port 3000')
+const PORT = process.env.PORT || 3000
+const HOST = process.env.HOST || 'localhost'
+
+app.listen(PORT, () => {
+  console.log(`App is running on http://${HOST}:${PORT}`)
+  console.log(`API documentation available at http://${HOST}:${PORT}/api-docs`)
 })
