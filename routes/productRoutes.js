@@ -1,5 +1,6 @@
 const express = require('express')
 const productController = require('../controllers/productController')
+const authMiddleware = require('../middlewares/authMiddleware')
 
 const router = express.Router()
 
@@ -34,7 +35,7 @@ const router = express.Router()
  *               items:
  *                 $ref: '#/components/schemas/Product'
  */
-router.get('/search', productController.searchProductByName)
+router.get('/search', authMiddleware.authenticateJWT , productController.searchProductByName)
 
 // GET: /products/paginage?page=1&limit=5
 /**
@@ -68,7 +69,7 @@ router.get('/search', productController.searchProductByName)
  *               items:
  *                 $ref: '#/components/schemas/Product'
  */
-router.get('/paginage', productController.getProductsByPage)
+router.get('/paginage', authMiddleware.authenticateJWT, productController.getProductsByPage)
 
 // GET: /products
 /**
@@ -87,7 +88,7 @@ router.get('/paginage', productController.getProductsByPage)
  *               items:
  *                 $ref: '#/components/schemas/Product'
  */
-router.get('/', productController.getAllProducts)
+router.get('/', authMiddleware.authenticateJWT, productController.getAllProducts)
 
 // GET: /products/1
 /**
@@ -113,7 +114,7 @@ router.get('/', productController.getAllProducts)
  *       404:
  *         description: Product not found
  */
-router.get('/:id', productController.getProductById)
+router.get('/:id', authMiddleware.authenticateJWT, productController.getProductById)
 
 // POST: /products
 /**
@@ -143,7 +144,7 @@ router.get('/:id', productController.getProductById)
  *             schema:
  *               $ref: '#/components/schemas/Product'
  */
-router.post('/', productController.createProduct)
+router.post('/', authMiddleware.authenticateJWT, productController.createProduct)
 
 // PUT: /products/1
 /**
@@ -182,7 +183,7 @@ router.post('/', productController.createProduct)
  *       404:
  *         description: Product not found
  */
-router.put('/:id', productController.updateProduct)
+router.put('/:id', authMiddleware.authenticateJWT, productController.updateProduct)
 
 // DELETE: /products/1
 /**
@@ -204,6 +205,6 @@ router.put('/:id', productController.updateProduct)
  *       404:
  *         description: Product not found
  */
-router.delete('/:id', productController.deleteProduct)
+router.delete('/:id', authMiddleware.authenticateJWT, productController.deleteProduct)
 
 module.exports = router
